@@ -25,7 +25,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: setup gradle
-        uses: gradle/grade-build-action@v2
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: build
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
