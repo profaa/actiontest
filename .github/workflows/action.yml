@@ -21,6 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
+      # Gradle Wrapper 권한 부여
       - name: permission for gradle
         run: chmod +x gradlew
 
@@ -36,3 +37,14 @@ jobs:
         with:
           name: jacoco-report
           path: build/reports/jacoco/test/html
+
+      # Gradle Test를 실행한다
+      - name: Test with Gradle
+        run: ./gradlew --info test
+
+      # Test 후 Report 생성
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          junit_files: '**/build/test-results/test/TEST-*.xml'
