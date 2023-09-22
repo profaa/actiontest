@@ -28,7 +28,7 @@ jobs:
         uses: gradle/grade-build-action@v2
         with:
           arguments: build
-          cache-read-only: ${{ github.ref != refs/heads/main' && github.ref != 'refs/heads/develop' }}
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
       - name: Upload Jacoco Report
         if: ${{ failure() }}
