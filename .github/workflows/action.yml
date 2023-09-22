@@ -58,7 +58,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Docker Hub Push
-        run: docker push hjlee4/myapp
+        run: docker push profsa/action
 
       # Test 후 Report 생성
 #      - name: Publish Test Results
