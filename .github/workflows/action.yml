@@ -21,7 +21,6 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      # Gradle Wrapper 권한 부여
       - name: permission for gradle
         run: chmod +x gradlew
 
@@ -29,27 +28,15 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
-          #cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/action' }}
 
-
-
-      - name: Upload Jacoco Report
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-report
-          path: build/reports/jacoco/test/html
-
-      # Gradle Test를 실행한다
       - name: Test with Gradle
         run: ./gradlew --info test
 
-      - name: 스프링부트 애플리케이션 빌드 # (1)
+      - name: build spring boot
         run: ./gradlew build
 
       - name: Docker Image Build
-#        run: docker build --build-arg JAR_FILE=target/*.jar --tag profsa/action .
-        run: docker build -t profsa/action .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/action .
 
       - name: Docker Hub Login
         uses: docker/login-action@v2
@@ -58,11 +45,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Docker Hub Push
-        run: docker push profsa/action
-
-      # Test 후 Report 생성
-#      - name: Publish Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v2
-#        if: always()
-#        with:
-#          junit_files: '**/build/test-results/test/TEST-*.xml'
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/action
